@@ -80,11 +80,18 @@ library LibDepositing {
         } else {
             deposits_ =
                 new TaikoData.EthDeposit[](numPending.min(_config.ethDepositMaxCountPerBlock));
+
             uint96 fee = uint96(_config.ethDepositMaxFee.min(block.basefee * _config.ethDepositGas));
+
             uint64 j = _state.slotA.nextEthDepositToProcess;
+
             uint96 totalFee;
+
             for (uint256 i; i < deposits_.length;) {
+
+                // getting the index of the deposit by Ring buffer DSA.
                 uint256 data = _state.ethDeposits[j % _config.ethDepositRingBufferSize];
+
                 deposits_[i] = TaikoData.EthDeposit({
                     recipient: address(uint160(data >> 96)),
                     amount: uint96(data),

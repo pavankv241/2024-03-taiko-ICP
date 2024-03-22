@@ -17,11 +17,11 @@ library TaikoData {
         // Group 2: Block level configs
         // ---------------------------------------------------------------------
         // The maximum number of proposals allowed in a single block.
-        uint64 blockMaxProposals;
+        uint64 blockMaxProposals; //
         // Size of the block ring buffer, allowing extra space for proposals.
         uint64 blockRingBufferSize;
         // The maximum number of verifications allowed when a block is proposed.
-        uint64 maxBlocksToVerifyPerProposal;
+        uint64 maxBlocksToVerifyPerProposal; // 1 Slot
         // The maximum gas limit allowed for a block.
         uint32 blockMaxGasLimit;
         // The maximum allowed bytes for the proposed transaction list calldata.
@@ -36,12 +36,12 @@ library TaikoData {
         // Group 3: Proof related configs
         // ---------------------------------------------------------------------
         // The amount of Taiko token as a prover liveness bond
-        uint96 livenessBond;
+        uint96 livenessBond; //192 bits covered
         // ---------------------------------------------------------------------
         // Group 4: ETH deposit related configs
         // ---------------------------------------------------------------------
         // The size of the ETH deposit ring buffer.
-        uint256 ethDepositRingBufferSize;
+        uint256 ethDepositRingBufferSize; // Start with 3 slot
         // The minimum number of ETH deposits allowed per block.
         uint64 ethDepositMinCountPerBlock;
         // The maximum number of ETH deposits allowed per block.

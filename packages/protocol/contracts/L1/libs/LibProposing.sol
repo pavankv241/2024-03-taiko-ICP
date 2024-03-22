@@ -18,7 +18,7 @@ library LibProposing {
     /// @notice The maximum number of bytes allowed per blob.
     /// @dev According to EIP4844, each blob has up to 4096 field elements, and each
     /// field element has 32 bytes.
-    uint256 public constant MAX_BYTES_PER_BLOB = 4096 * 32;
+    uint256 public constant MAX_BYTES_PER_BLOB = 4096 * 32; // 2 MB per block
 
     // Warning: Any events defined here must also be defined in TaikoEvents.sol.
     /// @notice Emitted when a block is proposed.
@@ -187,7 +187,7 @@ library LibProposing {
             }
 
             meta_.blobHash = keccak256(_txList);
-            meta_.txListByteOffset = 0;
+            meta_.txListByteOffset = 0; // Gas savings
             meta_.txListByteSize = uint24(_txList.length);
         }
 
@@ -225,7 +225,7 @@ library LibProposing {
             assignedProver: params.assignedProver
         });
 
-        // Store the block in the ring buffer
+        // Store the L1 block in the ring buffer
         _state.blocks[b.numBlocks % _config.blockRingBufferSize] = blk;
 
         // Increment the counter (cursor) by 1.

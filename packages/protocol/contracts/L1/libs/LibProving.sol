@@ -112,7 +112,7 @@ library LibProving {
             revert L1_INVALID_BLOCK_ID();
         }
 
-        uint64 slot = _meta.id % _config.blockRingBufferSize;
+        uint64 slot = _meta.id % _config.blockRingBufferSize; // Getting the index of the block in RQ DSA
         TaikoData.Block storage blk = _state.blocks[slot];
 
         // Check the integrity of the block data. It's worth noting that in
@@ -186,6 +186,8 @@ library LibProving {
         bool isTopTier = tier.contestBond == 0;
         IERC20 tko = IERC20(_resolver.resolve("taiko_token", false));
 
+    // --------------------------------------------------------------------------------
+        // Here new proof and return collateral to prover
         if (isTopTier) {
             // A special return value from the top tier prover can signal this
             // contract to return all liveness bond.
@@ -200,6 +202,9 @@ library LibProving {
 
         bool sameTransition = _tran.blockHash == ts.blockHash && _tran.stateRoot == ts.stateRoot;
 
+    // ==========================================================================
+
+        // Contestable proof here
         if (_proof.tier > ts.tier) {
             // Handles the case when an incoming tier is higher than the current transition's tier.
             // Reverts when the incoming proof tries to prove the same transition
@@ -336,7 +341,7 @@ library LibProving {
                 // reusable. However, given that the majority of blocks will
                 // only possess one transition — the correct one — we don't need
                 // to be concerned about the cost in this case.
-                _state.transitionIds[_blk.blockId][_tran.parentHash] = tid_;
+                _state.transitionIds[_blk.blockId][_tran.parentHash] = tid_; // Value zero
 
                 // There is no need to initialize ts.key here because it's only used when tid == 1
             }
@@ -398,7 +403,7 @@ library LibProving {
     }
 
     /// @dev Check the msg.sender (the new prover) against the block's assigned prover.
-    function _checkProverPermission(
+    function _checkProverPermission( // Check Prover
         TaikoData.State storage _state,
         TaikoData.Block storage _blk,
         TaikoData.TransitionState storage _ts,
@@ -411,8 +416,8 @@ library LibProving {
         // The highest tier proof can always submit new proofs
         if (_tier.contestBond == 0) return;
 
-        bool inProvingWindow = uint256(_ts.timestamp).max(_state.slotB.lastUnpausedAt)
-            + _tier.provingWindow * 60 >= block.timestamp;
+        bool inProvingWindow = uint256(_ts.timestamp).max(_state.slotB.lastUnpausedAt)+_tier.provingWindow *60
+             >= block.timestamp;
         bool isAssignedPover = msg.sender == _blk.assignedProver;
 
         // The assigned prover can only submit the very first transition.

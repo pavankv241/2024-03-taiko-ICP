@@ -273,7 +273,7 @@ contract Bridge is EssentialContract, IBridge {
                 // Handle special addresses that don't require actual invocation but
                 // mark message as DONE
                 refundAmount = _message.value;
-                _updateMessageStatus(msgHash, Status.DONE);
+                _updateMessageStatus(msgHash, Status.DONE); 
             } else {
                 // Use the specified message gas limit if called by the owner, else
                 // use remaining gas
@@ -588,6 +588,6 @@ contract Bridge is EssentialContract, IBridge {
             ISignalService.proveSignalReceived,
             (_chainId, resolve(_chainId, "bridge", false), _signal, _proof)
         );
-        (success_,) = _signalService.staticcall(data);
+        (success_,) = _signalService.staticcall(data); // Sending data to address
     }
 }

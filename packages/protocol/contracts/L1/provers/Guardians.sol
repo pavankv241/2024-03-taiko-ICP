@@ -51,7 +51,7 @@ abstract contract Guardians is EssentialContract {
     /// @param _newGuardians The new set of guardians
     /// @param _minGuardians The minimum required to sign
     function setGuardians(
-        address[] memory _newGuardians,
+        address[] memory _newGuardians, // Gas savings can be call data
         uint8 _minGuardians
     )
         external
